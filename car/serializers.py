@@ -3,7 +3,8 @@ from car.models import Car
 
 
 class CarSerializer(serializers.Serializer):
-    manufacture = serializers.CharField(max_length=64)
+    id = serializers.IntegerField(read_only=True)
+    manufacturer = serializers.CharField(max_length=64)
     model = serializers.CharField(max_length=64)
     horse_powers = serializers.IntegerField(min_value=1, max_value=1914)
     is_broken = serializers.BooleanField()
@@ -14,12 +15,12 @@ class CarSerializer(serializers.Serializer):
     )
 
     def create(self, validated_data):
-        return Car(**validated_data)
+        return Car.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.manufacture = validated_data.get(
-            "manufacture",
-            instance.manufacture
+            "manufacturer",
+            instance.manufacturer
         )
         instance.model = validated_data.get(
             "model",
